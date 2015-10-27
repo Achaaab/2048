@@ -10,9 +10,11 @@ import fr.guehenneux.alphabeta.ZeroSumGame;
  */
 public class PuzzleModel extends ZeroSumGame {
 
-	private Player tileGenerator;
-	private Player player;
+	private TileCreator tileCreator;
+	private TileMover tileMover;
 	private Player currentPlayer;
+
+	private PuzzleView view;
 
 	int[] tiles;
 
@@ -23,10 +25,12 @@ public class PuzzleModel extends ZeroSumGame {
 
 		tiles = new int[16];
 
-		tileGenerator = new TileCreator(this);
-		player = new TileCreator(this);
+		tileCreator = new TileCreator(this);
+		tileMover = new TileMoverKeyboard(this);
 
-		currentPlayer = tileGenerator;
+		currentPlayer = tileCreator;
+
+		view = null;
 	}
 
 	@Override
@@ -75,7 +79,7 @@ public class PuzzleModel extends ZeroSumGame {
 			}
 		}
 
-		if (player == tileGenerator) {
+		if (player == tileCreator) {
 			streak = -streak;
 		}
 
@@ -87,23 +91,30 @@ public class PuzzleModel extends ZeroSumGame {
 		return currentPlayer;
 	}
 
+	/**
+	 * @return
+	 */
+	public TileMover getTileMoverKeyBoard() {
+		return tileMover;
+	}
+
 	@Override
 	public void nextPlayer() {
 
-		if (currentPlayer == tileGenerator) {
-			currentPlayer = player;
+		if (currentPlayer == tileCreator) {
+			currentPlayer = tileMover;
 		} else {
-			currentPlayer = tileGenerator;
+			currentPlayer = tileCreator;
 		}
 	}
 
 	@Override
 	public void previousPlayer() {
 
-		if (currentPlayer == tileGenerator) {
-			currentPlayer = player;
+		if (currentPlayer == tileCreator) {
+			currentPlayer = tileMover;
 		} else {
-			currentPlayer = tileGenerator;
+			currentPlayer = tileCreator;
 		}
 	}
 
@@ -115,5 +126,20 @@ public class PuzzleModel extends ZeroSumGame {
 	@Override
 	public double getVictoryValue() {
 		return Double.MAX_VALUE;
+	}
+
+	@Override
+	public void updateView() {
+
+		if (view != null) {
+			view.update();
+		}
+	}
+
+	/**
+	 * @param view
+	 */
+	public void setView(PuzzleView view) {
+		this.view = view;
 	}
 }

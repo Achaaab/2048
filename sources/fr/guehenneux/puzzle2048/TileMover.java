@@ -9,26 +9,15 @@ import fr.guehenneux.alphabeta.Player;
 /**
  * @author Jonathan Guéhenneux
  */
-public class TileMover implements Player {
+public abstract class TileMover implements Player {
 
-	private PuzzleModel puzzle;
-
-	private Move left;
-	private Move up;
-	private Move right;
-	private Move down;
+	protected PuzzleModel puzzle;
 
 	/**
 	 * @param puzzle
 	 */
 	public TileMover(PuzzleModel puzzle) {
-
 		this.puzzle = puzzle;
-
-		left = new TileMove(puzzle, Direction.LEFT);
-		up = new TileMove(puzzle, Direction.UP);
-		right = new TileMove(puzzle, Direction.RIGHT);
-		down = new TileMove(puzzle, Direction.DOWN);
 	}
 
 	@Override
@@ -38,93 +27,105 @@ public class TileMover implements Player {
 
 		int[] tiles = puzzle.tiles;
 		int k;
+		boolean emptyTile;
 		boolean possibleMove;
 
 		// try left
 
 		k = 0;
 		possibleMove = false;
+		emptyTile = false;
 
 		while (k != 16 && !possibleMove) {
 
-			possibleMove = tiles[k] == 0 || tiles[k] == tiles[k + 1];
+			emptyTile |= tiles[k] == 0;
+			possibleMove = tiles[k + 1] != 0 && (emptyTile || tiles[k] == tiles[k + 1]);
 
 			k++;
 
 			if (k % 4 == 3) {
+
 				k++;
+				emptyTile = false;
 			}
 		}
 
 		if (possibleMove) {
-			moves.add(left);
+			moves.add(new TileMove(puzzle, Direction.LEFT));
 		}
 
 		// try up
 
 		k = 0;
 		possibleMove = false;
+		emptyTile = false;
 
-		while (k != 4 && !possibleMove) {
+		while (k != 15 && !possibleMove) {
 
-			possibleMove = tiles[k] == 0 || tiles[k] == tiles[k + 4];
+			emptyTile |= tiles[k] == 0;
+			possibleMove = tiles[k + 4] != 0 && (emptyTile || tiles[k] == tiles[k + 4]);
 
 			k += 4;
 
-			if (k > 11) {
+			if (k == 12 || k == 13 || k == 14) {
+
 				k -= 11;
+				emptyTile = false;
 			}
 		}
 
 		if (possibleMove) {
-			moves.add(up);
+			moves.add(new TileMove(puzzle, Direction.UP));
 		}
 
 		// try right
 
 		k = 0;
 		possibleMove = false;
+		emptyTile = false;
 
 		while (k != 16 && !possibleMove) {
 
-			possibleMove = tiles[k + 1] == 0 || tiles[k] == tiles[k + 1];
+			emptyTile |= tiles[k + 1] == 0;
+			possibleMove = tiles[k] != 0 && (emptyTile || tiles[k] == tiles[k + 1]);
 
 			k++;
 
 			if (k % 4 == 3) {
+
 				k++;
+				emptyTile = false;
 			}
 		}
 
 		if (possibleMove) {
-			moves.add(right);
+			moves.add(new TileMove(puzzle, Direction.RIGHT));
 		}
 
 		// try down
 
 		k = 0;
 		possibleMove = false;
+		emptyTile = false;
 
-		while (k != 4 && !possibleMove) {
+		while (k != 15 && !possibleMove) {
 
-			possibleMove = tiles[k + 4] == 0 || tiles[k] == tiles[k + 4];
+			emptyTile |= tiles[k + 4] == 0;
+			possibleMove = tiles[k] != 0 && (emptyTile || tiles[k] == tiles[k + 4]);
 
 			k += 4;
 
-			if (k > 11) {
+			if (k == 12 || k == 13 || k == 14) {
+
 				k -= 11;
+				emptyTile = false;
 			}
 		}
 
 		if (possibleMove) {
-			moves.add(down);
+			moves.add(new TileMove(puzzle, Direction.DOWN));
 		}
 
 		return moves;
-	}
-
-	@Override
-	public Move getMove() {
-		return puzzle.getBestMove();
 	}
 }

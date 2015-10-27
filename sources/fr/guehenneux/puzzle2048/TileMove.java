@@ -47,7 +47,12 @@ public class TileMove implements Move {
 
 					if (tileValue != 0) {
 
-						tiles[4 * i + newJ] = tileValue;
+						if (newJ < oldJ) {
+
+							tiles[4 * i + newJ] = tileValue;
+							tiles[4 * i + oldJ] = 0;
+						}
+
 						newJ++;
 					}
 				}
@@ -112,7 +117,12 @@ public class TileMove implements Move {
 
 					if (tileValue != 0) {
 
-						tiles[4 * newI + j] = tileValue;
+						if (newI < oldI) {
+
+							tiles[4 * newI + j] = tileValue;
+							tiles[4 * oldI + j] = 0;
+						}
+
 						newI++;
 					}
 				}
@@ -177,7 +187,12 @@ public class TileMove implements Move {
 
 					if (tileValue != 0) {
 
-						tiles[4 * i + newJ] = tileValue;
+						if (newJ > oldJ) {
+
+							tiles[4 * i + newJ] = tileValue;
+							tiles[4 * i + oldJ] = 0;
+						}
+
 						newJ--;
 					}
 				}
@@ -242,7 +257,12 @@ public class TileMove implements Move {
 
 					if (tileValue != 0) {
 
-						tiles[4 * newI + j] = tileValue;
+						if (newI > oldI) {
+
+							tiles[4 * newI + j] = tileValue;
+							tiles[4 * oldI + j] = 0;
+						}
+
 						newI--;
 					}
 				}
@@ -298,6 +318,13 @@ public class TileMove implements Move {
 		default:
 			break;
 		}
+	}
+
+	/**
+	 * @return the direction
+	 */
+	public Direction getDirection() {
+		return direction;
 	}
 
 	@Override
