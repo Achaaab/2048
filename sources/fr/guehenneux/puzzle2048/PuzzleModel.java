@@ -1,7 +1,5 @@
 package fr.guehenneux.puzzle2048;
 
-import java.util.Arrays;
-
 import fr.guehenneux.alphabeta.Player;
 import fr.guehenneux.alphabeta.ZeroSumGame;
 
@@ -9,6 +7,8 @@ import fr.guehenneux.alphabeta.ZeroSumGame;
  * @author Jonathan Guéhenneux
  */
 public class PuzzleModel extends ZeroSumGame {
+
+	private static final int[] SNAKE = { 0, 1, 2, 3, 7, 6, 5, 4, 8, 9, 10, 11, 15, 14, 13, 12 };
 
 	private TileCreator tileCreator;
 	private TileMover tileMover;
@@ -23,67 +23,130 @@ public class PuzzleModel extends ZeroSumGame {
 	 */
 	public PuzzleModel() {
 
+		super(0);
+
 		tiles = new int[16];
 
 		tileCreator = new TileCreator(this);
 		tileMover = new TileMoverKeyboard(this);
 
-		currentPlayer = tileCreator;
+		tileCreator.getMove().play();
+		tileCreator.getMove().play();
+
+		currentPlayer = tileMover;
 
 		view = null;
 	}
 
 	@Override
-	public PuzzleModel clone() {
-
-		PuzzleModel clone = new PuzzleModel();
-		clone.tiles = Arrays.copyOf(tiles, 16);
-		return clone;
-	}
-
-	@Override
 	public double getHeuristicValue(Player player) {
 
-		int previousTile = tiles[0];
-		int currentTile;
-		int k = 1;
-		int dk = 1;
-		int streak = 0;
-		boolean streakEnd = false;
+		double heuristicValue = getSnakeCount();
 
-		// snake streak : 0, 1, 2, 3, 7, 6, 5, 4, 8, 9, 10, 11, 15, 14
+		if (player == tileCreator) {
+			heuristicValue = -heuristicValue;
+		}
 
-		while (k < 16 && !streakEnd) {
+		return heuristicValue;
+	}
 
-			currentTile = tiles[k];
+	/**
+	 * @return
+	 */
+	private int getTileTotal() {
 
-			if (currentTile <= previousTile) {
+		int tileTotal = 0;
 
-				streak += previousTile;
+		for (int k = 0; k < 16; k++) {
+			tileTotal += 1 << tiles[k];
+		}
 
-				if (k % 4 == 3) {
+		return tileTotal;
+	}
 
-					k += 4;
-					dk = -dk;
+	/**
+	 * @return
+	 */
+	private int getSnakeCount() {
 
-				} else {
+		int snakeCount = 0;
 
-					k += dk;
-				}
+		int k0, k1;
+		int t0, t1;
 
-				previousTile = currentTile;
+		int s = 0;
+
+		boolean snakeEnded = false;
+
+		while (s < 15 && !snakeEnded) {
+
+			k0 = SNAKE[s];
+			k1 = SNAKE[++s];
+
+			t0 = tiles[k0];
+			t1 = tiles[k1];
+
+			if (t0 == 0) {
+
+				snakeEnded = true;
+
+			} else if (t0 >= t1) {
+
+				snakeCount += t0;
 
 			} else {
 
-				streakEnd = true;
+				snakeCount -= t1;
+				snakeEnded = true;
 			}
 		}
 
-		if (player == tileCreator) {
-			streak = -streak;
+		return snakeCount;
+	}
+
+	/**
+	 * @return
+	 */
+	private int getEmptyTileCount() {
+
+		int emptyTileCount = 0;
+
+		for (int k = 0; k < 16; k++) {
+			if (tiles[k] == 0) {
+				emptyTileCount++;
+			}
 		}
 
-		return streak;
+		return emptyTileCount;
+	}
+
+	/**
+	 * @return
+	 */
+	private double getSmoothness() {
+
+		int smoothness = 0;
+
+		int tile;
+		int rightTile;
+		int downTile;
+
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 3; j++) {
+
+				tile = tiles[4 * i + j];
+				rightTile = tiles[4 * i + j + 1];
+
+				smoothness -= Math.abs(tile - rightTile);
+
+				tile = tiles[4 * j + i];
+				downTile = tiles[4 * j + 4 + i];
+
+				smoothness -= Math.abs(tile - downTile);
+			}
+		}
+
+		return smoothness;
 	}
 
 	@Override
@@ -120,7 +183,11 @@ public class PuzzleModel extends ZeroSumGame {
 
 	@Override
 	public Player getWinner() {
-		return null;
+		if (tileMover.getMoves().isEmpty()) {
+			return tileCreator;
+		} else {
+			return null;
+		}
 	}
 
 	@Override

@@ -25,11 +25,22 @@ public class TileCreation implements Move {
 
 	@Override
 	public void play() {
+
 		puzzle.tiles[k] = value;
+		puzzle.nextPlayer();
 	}
 
 	@Override
 	public void cancel() {
+
 		puzzle.tiles[k] = 0;
+		puzzle.previousPlayer();
+	}
+
+	/**
+	 * 
+	 */
+	public String toString() {
+		return value + " in " + k;
 	}
 }

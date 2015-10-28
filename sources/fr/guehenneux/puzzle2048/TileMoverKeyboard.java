@@ -26,6 +26,8 @@ public class TileMoverKeyboard extends TileMover implements EventHandler<KeyEven
 
 		move = null;
 
+		System.out.println(getMoves());
+
 		try {
 			wait();
 		} catch (InterruptedException interruptedException) {

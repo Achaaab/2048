@@ -80,20 +80,20 @@ public abstract class TileMover implements Player {
 
 		// try right
 
-		k = 0;
+		k = 3;
 		possibleMove = false;
 		emptyTile = false;
 
-		while (k != 16 && !possibleMove) {
+		while (k != 19 && !possibleMove) {
 
-			emptyTile |= tiles[k + 1] == 0;
-			possibleMove = tiles[k] != 0 && (emptyTile || tiles[k] == tiles[k + 1]);
+			emptyTile |= tiles[k] == 0;
+			possibleMove = tiles[k - 1] != 0 && (emptyTile || tiles[k - 1] == tiles[k]);
 
-			k++;
+			k--;
 
-			if (k % 4 == 3) {
+			if (k % 4 == 0) {
 
-				k++;
+				k += 7;
 				emptyTile = false;
 			}
 		}
@@ -104,20 +104,20 @@ public abstract class TileMover implements Player {
 
 		// try down
 
-		k = 0;
+		k = 12;
 		possibleMove = false;
 		emptyTile = false;
 
-		while (k != 15 && !possibleMove) {
+		while (k != 16 && !possibleMove) {
 
-			emptyTile |= tiles[k + 4] == 0;
-			possibleMove = tiles[k] != 0 && (emptyTile || tiles[k] == tiles[k + 4]);
+			emptyTile |= tiles[k] == 0;
+			possibleMove = tiles[k - 4] != 0 && (emptyTile || tiles[k - 4] == tiles[k]);
 
-			k += 4;
+			k -= 4;
 
-			if (k == 12 || k == 13 || k == 14) {
+			if (k < 4) {
 
-				k -= 11;
+				k += 13;
 				emptyTile = false;
 			}
 		}

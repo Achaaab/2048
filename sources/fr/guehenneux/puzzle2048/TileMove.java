@@ -229,7 +229,7 @@ public class TileMove implements Move {
 							// 3221 -> 0331
 
 							tiles[4 * i + 2]++;
-							tiles[4 * i + 1] = tiles[4 * i + 2];
+							tiles[4 * i + 1] = tiles[4 * i];
 							tiles[4 * i] = 0;
 
 						} else if (tiles[4 * i + 1] != 0 && tiles[4 * i + 1] == tiles[4 * i]) {
@@ -283,11 +283,12 @@ public class TileMove implements Move {
 						} else {
 
 							// 0011 -> 0002
+							// 0111 -> 0012
 							// 3211 -> 0322
 
 							tiles[12 + j]++;
 							tiles[8 + j] = tiles[4 + j];
-							tiles[4 + j] = tiles[8 + j];
+							tiles[4 + j] = tiles[j];
 							tiles[j] = 0;
 						}
 
@@ -318,6 +319,8 @@ public class TileMove implements Move {
 		default:
 			break;
 		}
+
+		puzzle.nextPlayer();
 	}
 
 	/**
@@ -329,6 +332,13 @@ public class TileMove implements Move {
 
 	@Override
 	public void cancel() {
+
 		puzzle.tiles = savedTiles;
+		puzzle.previousPlayer();
+	}
+
+	@Override
+	public String toString() {
+		return direction.name();
 	}
 }

@@ -16,9 +16,11 @@ import javafx.scene.text.Font;
  */
 public class PuzzleView extends GridPane {
 
-	private static final Color[] COLORS = { Color.LIGHTGRAY, Color.WHITE, Color.BEIGE, Color.SANDYBROWN, Color.ORANGE,
-			Color.TOMATO, Color.RED, Color.LIGHTYELLOW, Color.LEMONCHIFFON, Color.YELLOW, Color.GOLD, Color.MAGENTA,
-			Color.MEDIUMPURPLE };
+	private static final Color[] COLORS = { Color.web("0xbbada0"), Color.web("0xeee4da"), Color.web("0xede0c8"),
+			Color.web("0xf2b179"), Color.web("0xf59563"), Color.web("0xf67c5f"), Color.web("0xf65e3b"),
+			Color.web("0xedcf72"), Color.web("0xedcc61"), Color.web("0xedc850"), Color.web("0xedc53f"),
+			Color.web("0xedc22e"), Color.web("0x000000"), Color.web("0x000000"), Color.web("0x000000"),
+			Color.web("0x000000"), Color.web("0x000000") };
 
 	private PuzzleModel model;
 
@@ -30,6 +32,7 @@ public class PuzzleView extends GridPane {
 	public PuzzleView(PuzzleModel model) {
 
 		setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+
 		setHgap(2);
 		setVgap(2);
 
@@ -52,6 +55,8 @@ public class PuzzleView extends GridPane {
 				add(labels[k] = label, j, i);
 			}
 		}
+
+		update();
 	}
 
 	/**
@@ -72,7 +77,12 @@ public class PuzzleView extends GridPane {
 
 			tileValue = model.tiles[k];
 
-			labels[k].setText(Integer.toString(1 << tileValue));
+			if (tileValue == 0) {
+				labels[k].setText("");
+			} else {
+				labels[k].setText(Integer.toString(1 << tileValue));
+			}
+
 			labels[k].setBackground(new Background(new BackgroundFill(COLORS[tileValue], CornerRadii.EMPTY,
 					Insets.EMPTY)));
 		}
