@@ -9,6 +9,7 @@ import fr.guehenneux.alphabeta.ZeroSumGame;
 public class PuzzleModel extends ZeroSumGame {
 
 	private static final int[] SNAKE = { 0, 1, 2, 3, 7, 6, 5, 4, 8, 9, 10, 11, 15, 14, 13, 12 };
+	private static final int[] WEIGHTS = { 8, 2, 2, 8, 2, 1, 1, 2, 2, 1, 1, 2, 8, 2, 2, 8 };
 
 	private TileCreator tileCreator;
 	private TileMover tileMover;
@@ -23,14 +24,17 @@ public class PuzzleModel extends ZeroSumGame {
 	 */
 	public PuzzleModel() {
 
-		super(0);
+		super(5);
 
 		tiles = new int[16];
 
 		tileCreator = new TileCreator(this);
-		tileMover = new TileMoverKeyboard(this);
+		tileMover = new TileMoverAI(this);
 
+		currentPlayer = tileCreator;
 		tileCreator.getMove().play();
+
+		currentPlayer = tileCreator;
 		tileCreator.getMove().play();
 
 		currentPlayer = tileMover;
@@ -41,7 +45,7 @@ public class PuzzleModel extends ZeroSumGame {
 	@Override
 	public double getHeuristicValue(Player player) {
 
-		double heuristicValue = getSnakeCount();
+		double heuristicValue = (getWeightedTileTotal() + 2 * getSmoothness()) / (16 - getEmptyTileCount());
 
 		if (player == tileCreator) {
 			heuristicValue = -heuristicValue;
@@ -62,6 +66,20 @@ public class PuzzleModel extends ZeroSumGame {
 		}
 
 		return tileTotal;
+	}
+
+	/**
+	 * @return
+	 */
+	private int getWeightedTileTotal() {
+
+		int weightedTileTotal = 0;
+
+		for (int k = 0; k < 16; k++) {
+			weightedTileTotal += WEIGHTS[k] << tiles[k];
+		}
+
+		return weightedTileTotal;
 	}
 
 	/**
@@ -137,12 +155,12 @@ public class PuzzleModel extends ZeroSumGame {
 				tile = tiles[4 * i + j];
 				rightTile = tiles[4 * i + j + 1];
 
-				smoothness -= Math.abs(tile - rightTile);
+				smoothness -= 1 << Math.abs(tile - rightTile);
 
 				tile = tiles[4 * j + i];
 				downTile = tiles[4 * j + 4 + i];
 
-				smoothness -= Math.abs(tile - downTile);
+				smoothness -= 1 << Math.abs(tile - downTile);
 			}
 		}
 
