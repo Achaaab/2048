@@ -3,21 +3,17 @@ package fr.guehenneux.puzzle2048;
 import java.util.Arrays;
 
 import fr.guehenneux.alphabeta.Player;
-import fr.guehenneux.alphabeta.ZeroSumGame;
+import fr.guehenneux.alphabeta.TwoPlayersZeroSumGame;
 
 /**
  * @author Jonathan Guéhenneux
  */
-public class PuzzleModel extends ZeroSumGame {
+public class PuzzleModel extends TwoPlayersZeroSumGame {
 
 	private static final int[] SNAKE = { 0, 1, 2, 3, 7, 6, 5, 4, 8, 9, 10, 11, 15, 14, 13, 12 };
 	private static final int[] WEIGHTS = { 8, 2, 2, 8, 2, 1, 1, 2, 2, 1, 1, 2, 8, 2, 2, 8 };
 
-	private TileCreator tileCreator;
-	private TileMover tileMover;
-	private Player currentPlayer;
-
-	private PuzzleView view;
+	private PuzzleGui gui;
 
 	int[] tiles;
 
@@ -26,22 +22,20 @@ public class PuzzleModel extends ZeroSumGame {
 	 */
 	public PuzzleModel() {
 
-		super(6);
-
 		tiles = new int[16];
 
-		tileCreator = new TileCreator(this);
-		tileMover = new TileMoverAI(this);
+		player0 = new TileCreator(this);
+		player1 = new TileMoverKeyboard(this);
 
-		currentPlayer = tileCreator;
-		tileCreator.getMove().play();
+		player0.getMove().play();
+		player0.getMove().play();
 
-		currentPlayer = tileCreator;
-		tileCreator.getMove().play();
+		gui = null;
+	}
 
-		currentPlayer = tileMover;
-
-		view = null;
+	@Override
+	public double getWinningMoveValue() {
+		return Double.MAX_VALUE;
 	}
 
 	@Override
@@ -49,7 +43,7 @@ public class PuzzleModel extends ZeroSumGame {
 
 		double heuristicValue = (getWeightedTileTotal() + 2 * getSmoothness()) / (16 - getEmptyTileCount());
 
-		if (player == tileCreator) {
+		if (player == player0) {
 			heuristicValue = -heuristicValue;
 		}
 
@@ -170,68 +164,49 @@ public class PuzzleModel extends ZeroSumGame {
 	}
 
 	@Override
-	public Player getCurrentPlayer() {
-		return currentPlayer;
-	}
-
-	/**
-	 * @return
-	 */
-	public TileMover getTileMoverKeyBoard() {
-		return tileMover;
-	}
-
-	@Override
-	public void nextPlayer() {
-
-		if (currentPlayer == tileCreator) {
-			currentPlayer = tileMover;
-		} else {
-			currentPlayer = tileCreator;
-		}
-	}
-
-	@Override
-	public void previousPlayer() {
-
-		if (currentPlayer == tileCreator) {
-			currentPlayer = tileMover;
-		} else {
-			currentPlayer = tileCreator;
-		}
-	}
-
-	@Override
 	public Player getWinner() {
-		if (tileMover.getMoves().isEmpty()) {
-			return tileCreator;
+
+		Player winner;
+
+		if (player1.getMoves().isEmpty()) {
+			winner = player0;
 		} else {
-			return null;
+			winner = null;
 		}
+
+		return winner;
 	}
 
 	@Override
-	public double getVictoryValue() {
-		return Double.MAX_VALUE;
+	public boolean isDraw() {
+		return false;
 	}
 
 	@Override
-	public void updateView() {
+	public void updateGui() {
 
-		if (view != null) {
+		if (gui != null) {
 
 			int[] displayedTiles = Arrays.copyOf(tiles, 16);
-			view.display(displayedTiles);
+			gui.display(displayedTiles);
 		}
 	}
 
 	/**
-	 * @param view
+	 * @param gui
 	 */
-	public void setView(PuzzleView view) {
+	public void setGui(PuzzleGui gui) {
 
-		this.view = view;
+		this.gui = gui;
 
-		updateView();
+		updateGui();
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public PuzzleGui getGui() {
+		return gui;
 	}
 }

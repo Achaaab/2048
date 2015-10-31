@@ -2,6 +2,7 @@ package fr.guehenneux.puzzle2048;
 
 import java.util.List;
 
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -12,21 +13,27 @@ import fr.guehenneux.alphabeta.Move;
  */
 public class TileMoverKeyboard extends TileMover implements EventHandler<KeyEvent> {
 
+	private Move move;
+	private boolean listening;
+
 	/**
 	 * @param puzzle
 	 */
 	public TileMoverKeyboard(PuzzleModel puzzle) {
-		super(puzzle);
-	}
 
-	private Move move;
+		super(puzzle);
+
+		listening = false;
+	}
 
 	@Override
 	public synchronized Move getMove() {
 
-		move = null;
+		if (!listening) {
+			Platform.runLater(() -> listen());
+		}
 
-		// System.out.println(getMoves());
+		move = null;
 
 		try {
 			wait();
@@ -35,6 +42,17 @@ public class TileMoverKeyboard extends TileMover implements EventHandler<KeyEven
 		}
 
 		return move;
+	}
+
+	/**
+	 * 
+	 */
+	private void listen() {
+
+		PuzzleGui gui = puzzle.getGui();
+		gui.setOnKeyPressed(this);
+		gui.requestFocus();
+		listening = true;
 	}
 
 	@Override
