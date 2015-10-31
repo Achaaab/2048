@@ -1,5 +1,7 @@
 package fr.guehenneux.puzzle2048;
 
+import java.util.Arrays;
+
 import fr.guehenneux.alphabeta.Player;
 import fr.guehenneux.alphabeta.ZeroSumGame;
 
@@ -24,7 +26,7 @@ public class PuzzleModel extends ZeroSumGame {
 	 */
 	public PuzzleModel() {
 
-		super(5);
+		super(6);
 
 		tiles = new int[16];
 
@@ -217,7 +219,9 @@ public class PuzzleModel extends ZeroSumGame {
 	public void updateView() {
 
 		if (view != null) {
-			view.update();
+
+			int[] displayedTiles = Arrays.copyOf(tiles, 16);
+			view.display(displayedTiles);
 		}
 	}
 
@@ -225,6 +229,9 @@ public class PuzzleModel extends ZeroSumGame {
 	 * @param view
 	 */
 	public void setView(PuzzleView view) {
+
 		this.view = view;
+
+		updateView();
 	}
 }

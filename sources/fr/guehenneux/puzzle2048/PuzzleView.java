@@ -22,22 +22,17 @@ public class PuzzleView extends GridPane {
 			Color.web("0xedc22e"), Color.web("0x000000"), Color.web("0x000000"), Color.web("0x000000"),
 			Color.web("0x000000"), Color.web("0x000000") };
 
-	private PuzzleModel model;
-
 	private Label[] labels;
 
 	/**
-	 * @param model
+	 * 
 	 */
-	public PuzzleView(PuzzleModel model) {
+	public PuzzleView() {
 
 		setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 
 		setHgap(2);
 		setVgap(2);
-
-		this.model = model;
-		model.setView(this);
 
 		labels = new Label[16];
 		Label label;
@@ -55,27 +50,25 @@ public class PuzzleView extends GridPane {
 				add(labels[k] = label, j, i);
 			}
 		}
-
-		update();
 	}
 
 	/**
-	 * 
+	 * @param tiles
 	 */
-	public void update() {
-		Platform.runLater(() -> updatePlatform());
+	public void display(int[] tiles) {
+		Platform.runLater(() -> updatePlatform(tiles));
 	}
 
 	/**
-	 * 
+	 * @param tiles
 	 */
-	private void updatePlatform() {
+	private void updatePlatform(int[] tiles) {
 
 		int tileValue;
 
 		for (int k = 0; k < 16; k++) {
 
-			tileValue = model.tiles[k];
+			tileValue = tiles[k];
 
 			if (tileValue == 0) {
 				labels[k].setText("");

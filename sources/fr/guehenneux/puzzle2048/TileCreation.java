@@ -1,11 +1,11 @@
 package fr.guehenneux.puzzle2048;
 
-import fr.guehenneux.alphabeta.Move;
+import fr.guehenneux.alphabeta.AbstractMove;
 
 /**
  * @author Jonathan Guéhenneux
  */
-public class TileCreation implements Move {
+public class TileCreation extends AbstractMove {
 
 	private PuzzleModel puzzle;
 	private int k;

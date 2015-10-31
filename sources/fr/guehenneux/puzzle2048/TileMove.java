@@ -2,12 +2,12 @@ package fr.guehenneux.puzzle2048;
 
 import java.util.Arrays;
 
-import fr.guehenneux.alphabeta.Move;
+import fr.guehenneux.alphabeta.AbstractMove;
 
 /**
  * @author Jonathan Guéhenneux
  */
-public class TileMove implements Move {
+public class TileMove extends AbstractMove {
 
 	private PuzzleModel puzzle;
 	private Direction direction;

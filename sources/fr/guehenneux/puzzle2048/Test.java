@@ -27,7 +27,9 @@ public class Test extends Application {
 		try {
 
 			PuzzleModel model = new PuzzleModel();
-			PuzzleView view = new PuzzleView(model);
+			PuzzleView view = new PuzzleView();
+
+			model.setView(view);
 
 			Group root = new Group(view);
 			Scene scene = new Scene(root);
