@@ -49,7 +49,7 @@ public class TileMoverKeyboard extends TileMover implements EventHandler<KeyEven
 	 */
 	private void listen() {
 
-		PuzzleGui gui = puzzle.getGui();
+		PuzzleUI gui = puzzle.getGui();
 		gui.setOnKeyPressed(this);
 		gui.requestFocus();
 		listening = true;

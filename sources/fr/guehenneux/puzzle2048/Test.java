@@ -25,7 +25,7 @@ public class Test extends Application {
 		try {
 
 			PuzzleModel model = new PuzzleModel();
-			PuzzleGui view = new PuzzleGui();
+			PuzzleUI view = new PuzzleUI();
 
 			model.setGui(view);
 

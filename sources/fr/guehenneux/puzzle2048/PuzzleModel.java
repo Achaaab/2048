@@ -13,7 +13,7 @@ public class PuzzleModel extends TwoPlayersZeroSumGame {
 	private static final int[] SNAKE = { 0, 1, 2, 3, 7, 6, 5, 4, 8, 9, 10, 11, 15, 14, 13, 12 };
 	private static final int[] WEIGHTS = { 8, 2, 2, 8, 2, 1, 1, 2, 2, 1, 1, 2, 8, 2, 2, 8 };
 
-	private PuzzleGui gui;
+	private PuzzleUI gui;
 
 	int[] tiles;
 
@@ -183,7 +183,7 @@ public class PuzzleModel extends TwoPlayersZeroSumGame {
 	}
 
 	@Override
-	public void updateGui() {
+	public void updateUI() {
 
 		if (gui != null) {
 
@@ -195,18 +195,18 @@ public class PuzzleModel extends TwoPlayersZeroSumGame {
 	/**
 	 * @param gui
 	 */
-	public void setGui(PuzzleGui gui) {
+	public void setGui(PuzzleUI gui) {
 
 		this.gui = gui;
 
-		updateGui();
+		updateUI();
 	}
 
 	/**
 	 * 
 	 * @return
 	 */
-	public PuzzleGui getGui() {
+	public PuzzleUI getGui() {
 		return gui;
 	}
 }

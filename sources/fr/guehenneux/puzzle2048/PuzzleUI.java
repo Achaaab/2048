@@ -14,7 +14,7 @@ import javafx.scene.text.Font;
 /**
  * @author Jonathan Guéhenneux
  */
-public class PuzzleGui extends GridPane {
+public class PuzzleUI extends GridPane {
 
 	private static final Color[] COLORS = { Color.web("0xbbada0"), Color.web("0xeee4da"), Color.web("0xede0c8"),
 			Color.web("0xf2b179"), Color.web("0xf59563"), Color.web("0xf67c5f"), Color.web("0xf65e3b"),
@@ -27,7 +27,7 @@ public class PuzzleGui extends GridPane {
 	/**
 	 * 
 	 */
-	public PuzzleGui() {
+	public PuzzleUI() {
 
 		setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 
