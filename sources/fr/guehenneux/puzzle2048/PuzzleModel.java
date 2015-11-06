@@ -25,7 +25,7 @@ public class PuzzleModel extends TwoPlayersZeroSumGame {
 		tiles = new int[16];
 
 		player0 = new TileCreator(this);
-		player1 = new TileMoverKeyboard(this);
+		player1 = new TileMoverAI(this);
 
 		player0.getMove().play();
 		player0.getMove().play();
@@ -35,7 +35,7 @@ public class PuzzleModel extends TwoPlayersZeroSumGame {
 
 	@Override
 	public double getWinningMoveValue() {
-		return Double.MAX_VALUE;
+		return 1000000;
 	}
 
 	@Override
