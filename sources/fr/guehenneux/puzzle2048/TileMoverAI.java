@@ -1,7 +1,7 @@
 package fr.guehenneux.puzzle2048;
 
 import fr.guehenneux.alphabeta.DecisionAlgorithm;
-import fr.guehenneux.alphabeta.MiniMax;
+import fr.guehenneux.alphabeta.Expectimax;
 import fr.guehenneux.alphabeta.Move;
 
 /**
@@ -18,7 +18,7 @@ public class TileMoverAI extends TileMover {
 
 		super(puzzle);
 
-		decisionAlgorithm = new MiniMax(puzzle, 7, false);
+		decisionAlgorithm = new Expectimax(puzzle, 7, false);
 	}
 
 	@Override
