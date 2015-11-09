@@ -18,6 +18,8 @@ public class TileCreation extends AbstractMove {
 	 */
 	public TileCreation(PuzzleModel puzzle, int k, int value) {
 
+		super(puzzle);
+
 		this.puzzle = puzzle;
 		this.k = k;
 		this.value = value;
@@ -27,14 +29,16 @@ public class TileCreation extends AbstractMove {
 	public void play() {
 
 		puzzle.tiles[k] = value;
-		puzzle.nextPlayer();
+
+		super.play();
 	}
 
 	@Override
 	public void cancel() {
 
 		puzzle.tiles[k] = 0;
-		puzzle.previousPlayer();
+
+		super.cancel();
 	}
 
 	/**

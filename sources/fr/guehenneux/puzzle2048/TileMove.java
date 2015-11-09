@@ -20,6 +20,8 @@ public class TileMove extends AbstractMove {
 	 */
 	public TileMove(PuzzleModel puzzle, Direction direction) {
 
+		super(puzzle);
+
 		this.puzzle = puzzle;
 		this.direction = direction;
 	}
@@ -320,7 +322,7 @@ public class TileMove extends AbstractMove {
 			break;
 		}
 
-		puzzle.nextPlayer();
+		super.play();
 	}
 
 	/**
@@ -334,7 +336,8 @@ public class TileMove extends AbstractMove {
 	public void cancel() {
 
 		puzzle.tiles = savedTiles;
-		puzzle.previousPlayer();
+
+		super.cancel();
 	}
 
 	@Override
